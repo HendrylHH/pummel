@@ -1,0 +1,205 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Pummel da Amizade</title>
+  <style>
+    body {
+      font-family: 'Roboto', Arial, sans-serif;
+      background-image: url('https://cdn.akamai.steamstatic.com/steam/apps/880940/header.jpg');
+      background-size: cover;
+      background-position: center;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      min-height: 100vh;
+      color: #fff;
+      text-align: center;
+      backdrop-filter: blur(5px);
+    }
+
+    h1 {
+      color: #ffd700;
+      font-size: 3rem;
+      text-shadow: 3px 3px 6px #000;
+      margin-bottom: 20px;
+    }
+
+    button {
+      background-color: #6a5acd;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 1.2rem;
+      border-radius: 8px;
+      cursor: pointer;
+      margin-top: 10px;
+      transition: background-color 0.3s, transform 0.2s;
+      box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.3);
+    }
+
+    button:hover {
+      background-color: #5845a3;
+      transform: scale(1.05);
+    }
+
+    .result {
+      margin-top: 20px;
+      font-size: 1.5rem;
+      color: #ffd700;
+      text-shadow: 2px 2px 4px #000;
+      animation: fadeIn 0.5s ease-in-out;
+    }
+
+    .highlight {
+      color: #ff4500;
+      font-weight: bold;
+    }
+
+    @keyframes fadeIn {
+      from {
+        opacity: 0;
+      }
+      to {
+        opacity: 1;
+      }
+    }
+
+    .controls {
+      background: rgba(0, 0, 0, 0.7);
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 2px 4px 10px rgba(0, 0, 0, 0.5);
+      width: 90%;
+      max-width: 400px;
+      margin-top: 20px;
+    }
+
+    .controls h2 {
+      color: #ffd700;
+      font-size: 1.5rem;
+      margin-bottom: 10px;
+    }
+
+    .controls input {
+      margin: 5px;
+      padding: 10px;
+      font-size: 1rem;
+      border: none;
+      border-radius: 5px;
+      width: calc(100% - 20px);
+    }
+
+    .controls button {
+      margin: 5px 0;
+      width: 100%;
+    }
+
+    ul {
+      list-style: none;
+      padding: 0;
+      margin-top: 10px;
+    }
+
+    li {
+      margin: 5px 0;
+      color: #fff;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    li button {
+      background-color: #ff4500;
+      padding: 5px 10px;
+      font-size: 0.8rem;
+      border: none;
+      border-radius: 5px;
+      cursor: pointer;
+      transition: background-color 0.3s;
+    }
+
+    li button:hover {
+      background-color: #d63b00;
+    }
+  </style>
+</head>
+<body>
+  <h1>Pummel da Amizade</h1>
+  <button id="drawButton">SORTEIA LOGO ESSA MERDA ATHOS</button>
+  <div class="controls">
+    <h2>Gerenciar Nomes</h2>
+    <input type="text" id="nameInput" placeholder="Digite um nome...">
+    <button id="addNameButton">Adicionar Nome</button>
+    <ul id="nameList"></ul>
+  </div>
+  <div class="result" id="result"></div>
+
+  <script>
+    const names = ["Sisifo", "Cadu", "Uchiha", "Adriel", "Natsume", "Athos"];
+
+    const updateNameList = () => {
+      const nameList = document.getElementById("nameList");
+      nameList.innerHTML = names
+        .map(
+          (name, index) =>
+            `<li>${name} <button onclick="removeName(${index})">Remover</button></li>`
+        )
+        .join("");
+    };
+
+    const removeName = (index) => {
+      if (confirm(`Tem certeza que deseja remover o nome "${names[index]}"?`)) {
+        names.splice(index, 1);
+        updateNameList();
+      }
+    };
+
+    document.getElementById("addNameButton").addEventListener("click", () => {
+      const nameInput = document.getElementById("nameInput");
+      const newName = nameInput.value.trim();
+      if (newName) {
+        names.push(newName);
+        nameInput.value = "";
+        updateNameList();
+      } else {
+        alert("Nomezin favor.");
+      }
+    });
+
+    document.getElementById("drawButton").addEventListener("click", () => {
+      if (names.length < 2) {
+        document.getElementById("result").innerText =
+          "Joga com alguém porra";
+        return;
+      }
+
+      const shuffled = names.sort(() => 0.5 - Math.random());
+      let pairs = "";
+
+      const soloMessages = [
+        "MAMOU FOI?",
+      ];
+
+      for (let i = 0; i < shuffled.length; i += 2) {
+        if (i + 1 < shuffled.length) {
+          pairs += `<div>🎉 Dupla: <span class="highlight">${shuffled[i]}</span> e <span class="highlight">${shuffled[i + 1]}</span></div>`;
+        } else {
+          pairs += `<div>🧍 ${
+            soloMessages[Math.floor(Math.random() * soloMessages.length)]
+          } <span class="highlight">${shuffled[i]}</span></div>`;
+        }
+      }
+
+      document.getElementById("result").innerHTML =
+        pairs + `<div style="margin-top: 10px;">🎊 BORA DALE 🎉</div>`;
+    });
+
+    updateNameList();
+  </script>
+</body>
+</html>
